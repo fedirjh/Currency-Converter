@@ -1,0 +1,73 @@
+<html>
+<head>
+</head>
+<body>
+  <h2>Currency Converter</h2>
+  <p>
+    <input id="val"/>
+    <select id="from"></select>
+    <select id="to"></select>
+    <button type="button" onclick="Convert()">convert</button>
+  </p>
+  <span id="outputCelcius"></span>
+
+<script src="idb.js"></script>
+<script>
+ navigator.serviceWorker.register('sw.js').then(function(reg) {
+  });
+var getJSON = function(url) {
+		return new Promise(function(resolve, reject) {
+			let xhr = new XMLHttpRequest();
+			xhr.open('get', url, true);
+			xhr.responseType = 'json';
+			xhr.onload = function() {
+				let status = xhr.status;
+				if (status == 200) {resolve(xhr.response);} else {reject(status);}};
+			xhr.send();
+		});
+	};
+  function option(x,y) {
+      let z = document.getElementById(x);
+      let option = document.createElement("option");
+      option.text = y;
+      z.add(option);
+  }
+  var dbPromise = idb.open('Converter', 1, function(upgradeDb) {
+    var keyValStore = upgradeDb.createObjectStore('currency');
+  });
+  function currency() {
+    return getJSON(`https://free.currencyconverterapi.com/api/v5/currencies`)
+    .then(function(data) {
+      let i=0;
+      for(let row in data.results){
+        let options=data.results[row].id;
+        dbPromise.then(function(db) {
+          var tx = db.transaction('currency', 'readwrite');
+          var keyValStore = tx.objectStore('currency');
+          keyValStore.put(row, i);
+          i++
+          return tx.complete;
+        }).then(function() {
+          option("from",options);
+          option("to",options);
+        });
+      }
+    }, function(status) {
+      console.log('error');
+    });
+  }
+  currency();
+	function Convert() {
+    let from = document.getElementById("from").value;
+    let to = document.getElementById("to").value;
+    let val = document.getElementById("val").value;
+		return getJSON(`https://free.currencyconverterapi.com/api/v5/convert?q=${from}_${to}&compact=y`)
+    .then(function(data) {
+    		console.log((data[`${from}_${to}`].val)*val);
+		}, function(status) {
+			console.log('error');
+		});
+	}
+</script>
+
+</body>
