@@ -4,12 +4,13 @@
 <body>
   <h2>Currency Converter</h2>
   <p>
-    <input id="val"/>
+    <input id="xfrom"/>
     <select id="from"></select>
     <select id="to"></select>
     <button type="button" onclick="Convert()">convert</button>
+    <span id="xto"></span>
   </p>
-  <span id="outputCelcius"></span>
+  
 
 <script src="idb.js"></script>
 <script>
@@ -32,8 +33,8 @@ var getJSON = function(url) {
       option.text = y;
       z.add(option);
   }
-  var dbPromise = idb.open('Converter', 1, function(upgradeDb) {
-    var keyValStore = upgradeDb.createObjectStore('mycurrency');
+  var dbPromise = idb.open('Converter', 2, function(upgradeDb) {
+    var keyValStore1 = upgradeDb.createObjectStore('mycurrency');
   });
   function currency() {
     return getJSON(`https://free.currencyconverterapi.com/api/v5/currencies`)
@@ -51,16 +52,16 @@ var getJSON = function(url) {
 	function Convert() {
     let from = document.getElementById("from").value;
     let to = document.getElementById("to").value;
-    let val = document.getElementById("val").value;
+    let val = document.getElementById("xfrom").value;
 		return getJSON(`https://free.currencyconverterapi.com/api/v5/convert?q=${from}_${to}&compact=y`)
     .then(function(data) {
 			dbPromise.then(function(db) {
           var tx = db.transaction('mycurrency', 'readwrite');
-          var keyValStore = tx.objectStore('mycurrency');
-          keyValStore.put(data[`${from}_${to}`].val, `${from}_${to}`);
+          var keyValStore1 = tx.objectStore('mycurrency');
+          keyValStore1.put(data[`${from}_${to}`].val, `${from}_${to}`);
           return tx.complete;
         }).then(function() {
-          console.log((data[`${from}_${to}`].val)*val);
+          document.getElementById("xto").innerHTML = data[`${from}_${to}`].val*val;
         });
 		}, function(status) {
 			console.log('error');
