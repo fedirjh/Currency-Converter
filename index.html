@@ -33,24 +33,15 @@ var getJSON = function(url) {
       z.add(option);
   }
   var dbPromise = idb.open('Converter', 1, function(upgradeDb) {
-    var keyValStore = upgradeDb.createObjectStore('currency');
+    var keyValStore = upgradeDb.createObjectStore('mycurrency');
   });
   function currency() {
     return getJSON(`https://free.currencyconverterapi.com/api/v5/currencies`)
     .then(function(data) {
-      let i=0;
       for(let row in data.results){
         let options=data.results[row].id;
-        dbPromise.then(function(db) {
-          var tx = db.transaction('currency', 'readwrite');
-          var keyValStore = tx.objectStore('currency');
-          keyValStore.put(row, i);
-          i++
-          return tx.complete;
-        }).then(function() {
           option("from",options);
           option("to",options);
-        });
       }
     }, function(status) {
       console.log('error');
@@ -63,7 +54,14 @@ var getJSON = function(url) {
     let val = document.getElementById("val").value;
 		return getJSON(`https://free.currencyconverterapi.com/api/v5/convert?q=${from}_${to}&compact=y`)
     .then(function(data) {
-    		console.log((data[`${from}_${to}`].val)*val);
+			dbPromise.then(function(db) {
+          var tx = db.transaction('mycurrency', 'readwrite');
+          var keyValStore = tx.objectStore('mycurrency');
+          keyValStore.put(data[`${from}_${to}`].val, `${from}_${to}`);
+          return tx.complete;
+        }).then(function() {
+          console.log((data[`${from}_${to}`].val)*val);
+        });
 		}, function(status) {
 			console.log('error');
 		});
