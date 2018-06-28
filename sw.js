@@ -9,6 +9,7 @@ self.addEventListener('install', function(event) {
         'index.html',
         'idb.js',
         'https://free.currencyconverterapi.com/api/v5/currencies',
+        'https://free.currencyconverterapi.com/api/v5/convert',
       ]);
     })
   );
