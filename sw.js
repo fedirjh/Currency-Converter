@@ -39,9 +39,10 @@ self.addEventListener('fetch', function(event) {
       event.respondWith(caches.match('/api/v5/currencies'));
       return;
   }
-  if(requestUrl === apiurl){
+  else if(requestUrl === apiurl){
       var dbPromise = idb.open('Converter', 2);
       var objx;
+    console.log('herewe go');
         dbPromise.then(db => {
           return db.transaction('mycurrency')
             .objectStore('mycurrency').get(querySt(event.request.url,'q'));
