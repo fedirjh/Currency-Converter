@@ -41,16 +41,22 @@ self.addEventListener('fetch', function(event) {
   }
   if(requestUrl.origin === 'https://free.currencyconverterapi.com'){
     if( requestUrl.pathname === '/api/v5/convert'){
-  var obj =  db.transaction('Converter').objectStore('mycurency').get(querySt(event.request.url,'q'));
-      if(querySt(event.request.url,'q') == obj){
+      var dbPromise = idb.open('Converter', 2);
+      var objx;
+        dbPromise.then(db => {
+          return db.transaction('mycurrency')
+            .objectStore('mycurrency').get(querySt(event.request.url,'q'));
+        }).then(obj => objx = obj);
+      if(objx){
         event.respondWith(obj);
+        return;
+      }
+      else{
+        event.respondWith(fetch(event.request));
+        return;
+      }
+    }
   }
-  else{
-    event.respondWith(fetch(event.request));
-    return;
-}
-  }
-}
   event.respondWith(
     caches.match(event.request.url).then(function(response) {
       return response || fetch(event.request);
