@@ -41,22 +41,11 @@ self.addEventListener('fetch', function(event) {
   }
   if(event.request.url.indexOf('v5/convert') !=-1){
       var dbPromise = idb.open('Converter', 2);
-      var objx;
-    console.log('herewe go');
-    console.log(querySt(event.request.url,'q'));
-        dbPromise.then(db => {
-          return db.transaction('mycurrency')
-            .objectStore('mycurrency').get(querySt(event.request.url,'q'));
-        }).then(obj => objx = obj);
-    console.log(objx);
-      if(objx){
-        event.respondWith(objx);
+      dbPromise.then(db => {
+        return db.transaction('mycurrency')
+          .objectStore('mycurrency').get('EUR_ALL');
+      }).then(obj => obj ? event.respondWith(obj):event.respondWith(fetch(event.request)));
         return;
-      }
-      else{
-        event.respondWith(fetch(event.request));
-        return;
-      }
   }
   event.respondWith(
     caches.match(event.request.url).then(function(response) {
