@@ -33,7 +33,16 @@ self.addEventListener('fetch', function(event) {
   var requestUrl = new URL(event.request.url);
   var apiurlcur = new URL('https://free.currencyconverterapi.com/api/v5/currencies');
   var apiurl = new URL('?q='+querySt('q')+'&compact=y');
-
+function querySt(Key) {
+    var url = event.request.url;
+    KeysValues = url.split(/[\?&]+/);
+    for (i = 0; i < KeysValues.length; i++) {
+        KeyValue = KeysValues[i].split("=");
+        if (KeyValue[0] == Key) {
+            return KeyValue[1];
+        }
+    }
+}
   if(requestUrl === apiurlcur){
       event.respondWith(caches.match('/api/v5/currencies'));
       return;
@@ -63,13 +72,4 @@ self.addEventListener('message', function(event) {
     self.skipWaiting();
   }
 });
-function querySt(Key) {
-    var url = event.request.url;
-    KeysValues = url.split(/[\?&]+/);
-    for (i = 0; i < KeysValues.length; i++) {
-        KeyValue = KeysValues[i].split("=");
-        if (KeyValue[0] == Key) {
-            return KeyValue[1];
-        }
-    }
-}
+
