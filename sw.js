@@ -41,7 +41,7 @@ self.addEventListener('fetch', function(event) {
     dbPromise.then(db => {
     return db.transaction('objs')
       .objectStore('mycurrency').get(querySt('q'));
-  }).then(allObjs => event.respondWith((allObjs));
+  }).then(allObjs => event.respondWith(allObjs);
       return;
   }
   event.respondWith(
