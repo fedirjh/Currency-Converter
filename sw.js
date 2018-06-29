@@ -40,18 +40,27 @@ self.addEventListener('fetch', function(event) {
       return;
   }
   if(event.request.url.indexOf('v5/convert') !=-1){
+    let cur;
       var dbPromise = idb.open('Converter', 2);
       dbPromise.then(db => {
         return db.transaction('mycurrency')
-          .objectStore('mycurrency').get('EUR_ALL');
-      }).then(obj => event.respondWith(obj) || event.respondWith(fetch(event.request)));
+          .objectStore('mycurrency').get(event.request.url,querySt('q'));
+      }).then(obj => cur=obj);
+    console.log(cur);
+      if(cur){
+        event.respondWith(cur);
         return;
+      }
+    else{
+       event.respondWith(fetch(event.request));
+        return;
+    }
   }
-  else{event.respondWith(
+  event.respondWith(
     caches.match(event.request.url).then(function(response) {
       return response || fetch(event.request);
     })
-  );}
+  );
 });
 
 function querySt(url,Key) {
