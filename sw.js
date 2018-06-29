@@ -33,14 +33,13 @@ self.addEventListener('activate', function(event) {
 self.addEventListener('fetch', function(event) {
   var requestUrl = new URL(event.request.url);
   var apiurlcur = new URL('https://free.currencyconverterapi.com/api/v5/currencies');
-  //var apiurl = new URL('?q='+querySt('q')+'&compact=y');
+  var apiurl = new URL('https://free.currencyconverterapi.com/api/v5/convert'+requestUrl.search);
 
   if(requestUrl === apiurlcur){
       event.respondWith(caches.match('/api/v5/currencies'));
       return;
   }
-  if(requestUrl.origin === 'https://free.currencyconverterapi.com'){
-    if( requestUrl.pathname === '/api/v5/convert'){
+  if(requestUrl === apiurl){
       var dbPromise = idb.open('Converter', 2);
       var objx;
         dbPromise.then(db => {
@@ -55,19 +54,12 @@ self.addEventListener('fetch', function(event) {
         event.respondWith(fetch(event.request));
         return;
       }
-    }
   }
   event.respondWith(
     caches.match(event.request.url).then(function(response) {
       return response || fetch(event.request);
     })
   );
-});
-
-self.addEventListener('message', function(event) {
-  if (event.data.action === 'skipWaiting') {
-    self.skipWaiting();
-  }
 });
 
 function querySt(url,Key) {
