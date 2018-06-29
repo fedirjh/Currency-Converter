@@ -39,7 +39,7 @@ self.addEventListener('fetch', function(event) {
       event.respondWith(caches.match('/api/v5/currencies'));
       return;
   }
-  if(requestUrl.indexOf("v5/convert") !=-1){
+  if(requestUrl.indexOf('v5/convert') !=-1){
       var dbPromise = idb.open('Converter', 2);
       var objx;
     console.log('herewe go');
