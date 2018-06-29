@@ -20,7 +20,7 @@ self.addEventListener('activate', function(event) {
     caches.keys().then(function(cacheNames) {
       return Promise.all(
         cacheNames.filter(function(cacheName) {
-          return cacheName.startsWith('wittr-') &&
+          return cacheName.startsWith('converter-') &&
                  cacheName != staticCacheName;
         }).map(function(cacheName) {
           return caches.delete(cacheName);
@@ -44,7 +44,7 @@ self.addEventListener('fetch', function(event) {
       dbPromise.then(db => {
         return db.transaction('mycurrency')
           .objectStore('mycurrency').get('EUR_ALL');
-      }).then(obj => return event.respondWith(obj) || event.respondWith(fetch(event.request)));
+      }).then(obj => event.respondWith(obj) || event.respondWith(fetch(event.request)));
         return;
   }
   event.respondWith(
