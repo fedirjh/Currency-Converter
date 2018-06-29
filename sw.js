@@ -32,7 +32,7 @@ self.addEventListener('activate', function(event) {
 self.addEventListener('fetch', function(event) {
   var requestUrl = new URL(event.request.url);
   var apiurlcur = new URL('https://free.currencyconverterapi.com/api/v5/currencies');
-  var apiurl = new URL('?q='+querySt('q')+'&compact=y');
+  //var apiurl = new URL('?q='+querySt('q')+'&compact=y');
 
   if(requestUrl === apiurlcur){
       event.respondWith(caches.match('/api/v5/currencies'));
