@@ -43,7 +43,7 @@ self.addEventListener('fetch', function(event) {
       if(event.request.url,querySt('q')){
     dbPromise.then(db => {
     return db.transaction('objs').objectStore('mycurency').get(event.request.url,querySt('q'));
-    }).then(allObjs => event.respondWith((allObjs));
+    }).then(allObjs => event.respondWith(allObjs));
   }
   else{
     event.respondWith(fetch(event.request));
