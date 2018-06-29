@@ -40,10 +40,9 @@ self.addEventListener('fetch', function(event) {
   }
   if(requestUrl.origin === 'https://free.currencyconverterapi.com'){
     if( requestUrl.pathname === '/api/v5/convert'){
-      if(event.request.url,querySt('q')){
-    dbPromise.then(db => {
-    return db.transaction('objs').objectStore('mycurency').get(event.request.url,querySt('q'));
-    }).then(allObjs => event.respondWith(allObjs));
+  var obj =  db.transaction('Converter').objectStore('mycurency').get(querySt(event.request.url,'q'));
+      if(querySt(event.request.url,'q') == obj){
+        event.respondWith(obj);
   }
   else{
     event.respondWith(fetch(event.request));
