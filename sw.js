@@ -34,7 +34,6 @@ self.addEventListener('fetch', function(event) {
   var requestUrl = new URL(event.request.url);
   var apiurlcur = new URL('https://free.currencyconverterapi.com/api/v5/currencies');
   var apiurl = new URL('https://free.currencyconverterapi.com/api/v5/convert'+requestUrl.search);
-  console.log(requestUrl+'                  '+apiurl);
 
   if(requestUrl === apiurlcur){
       event.respondWith(caches.match('/api/v5/currencies'));
@@ -49,11 +48,9 @@ self.addEventListener('fetch', function(event) {
         }).then(obj => objx = obj);
       if(objx){
         event.respondWith(obj);
-        return;
       }
       else{
         event.respondWith(fetch(event.request));
-        return;
       }
   }
   event.respondWith(
