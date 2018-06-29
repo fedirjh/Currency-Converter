@@ -43,15 +43,19 @@ self.addEventListener('fetch', function(event) {
       var dbPromise = idb.open('Converter', 2);
       var objx;
     console.log('herewe go');
+    console.log(querySt(event.request.url,'q'));
         dbPromise.then(db => {
           return db.transaction('mycurrency')
             .objectStore('mycurrency').get(querySt(event.request.url,'q'));
         }).then(obj => objx = obj);
+    console.log(objx);
       if(objx){
-        event.respondWith(obj);
+        event.respondWith(objx);
+        return;
       }
       else{
         event.respondWith(fetch(event.request));
+        return;
       }
   }
   event.respondWith(
