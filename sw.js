@@ -37,8 +37,8 @@ self.addEventListener('fetch', function(event) {
       return;
   }
   if(event.request.url.indexOf('v5/convert') !=-1){
-    event.respondWith(
-      var dbPromise = idb.open('Converter', 2);
+       var dbPromise = idb.open('Converter', 2);
+  event.respondWith(
       dbPromise.then(db => {
         return db.transaction('mycurrency')
           .objectStore('mycurrency').get(querySt(event.request.url,'q'));
