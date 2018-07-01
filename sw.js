@@ -1,9 +1,7 @@
-importScripts('idb.js');
+//importScripts('idb.js');
 var staticCacheName = 'converter-v1';
 
 self.addEventListener('install', function(event) {
-  // TODO: cache /skeleton rather than the root page
-
   event.waitUntil(
     caches.open(staticCacheName).then(function(cache) {
       return cache.addAll([
@@ -14,7 +12,6 @@ self.addEventListener('install', function(event) {
     })
   );
 });
-
 self.addEventListener('activate', function(event) {
   event.waitUntil(
     caches.keys().then(function(cacheNames) {
@@ -40,21 +37,20 @@ self.addEventListener('fetch', function(event) {
       return;
   }
   if(event.request.url.indexOf('v5/convert') !=-1){
-    let cur;
       var dbPromise = idb.open('Converter', 2);
       dbPromise.then(db => {
         return db.transaction('mycurrency')
           .objectStore('mycurrency').get(querySt(event.request.url,'q'));
-      }).then(obj => cur=obj);
-    console.log(cur);
-      if(cur){
+      }).then(cur => {
+       if(cur){
         event.respondWith(cur);
         return;
-      }
-    else{
-       event.respondWith(fetch(event.request));
-        return;
-    }
+          }
+        else{
+           event.respondWith(fetch(event.request));
+            return;
+        }
+      });
   }
   event.respondWith(
     caches.match(event.request.url).then(function(response) {
