@@ -39,11 +39,12 @@ self.addEventListener('fetch', function(event) {
   if(event.request.url.indexOf('v5/convert') !=-1){
     let dbPromise = idb.open('Converter', 2);
     let opt = querySt(event.request.url,'q');
+    let now = ate.now();
         event.respondWith(
           dbPromise.then(db => {
             return db.transaction('mycurrency')
               .objectStore('mycurrency').get(opt);
-          }).then(cur => cur ? new Response(`{"${opt}":{"val":${cur.split('-')[0]}}}`) : fetch(event.request)));
+          }).then(cur => cur && (now - cur.split('-')['1'] < 3600000) ? new Response(`{"${opt}":{"val":${cur.split('-')[0]}}}`) : fetch(event.request)));
         return;
   }
   event.respondWith(
