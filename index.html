@@ -58,7 +58,7 @@ var getJSON = function(url) {
 			dbPromise.then(function(db) {
           var tx = db.transaction('mycurrency', 'readwrite');
           var keyValStore1 = tx.objectStore('mycurrency');
-          keyValStore1.put(data[`${from}_${to}`].val, `${from}_${to}`);
+          keyValStore1.put(data[`${from}_${to}`].val, `${from}_${to}-${Date.now()}`);
           return tx.complete;
         }).then(function() {
           document.getElementById("xto").innerHTML = data[`${from}_${to}`].val*val;
