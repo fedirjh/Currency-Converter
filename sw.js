@@ -6,6 +6,8 @@ self.addEventListener('install', function(event) {
     caches.open(staticCacheName).then(function(cache) {
       return cache.addAll([
         'index.html',
+        'now-ui-kit.css',
+        'bootstrap.min.css',
         'idb.js',
         'https://free.currencyconverterapi.com/api/v5/currencies',
       ]);
