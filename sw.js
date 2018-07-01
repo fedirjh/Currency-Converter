@@ -1,5 +1,5 @@
 importScripts('idb.js');
-var staticCacheName = 'converter-v2';
+var staticCacheName = 'converter-v1';
 
 self.addEventListener('install', function(event) {
   event.waitUntil(
