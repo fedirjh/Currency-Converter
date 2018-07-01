@@ -1,15 +1,17 @@
 <html>
-<head>
+<head>    
+	<link href="bootstrap.min.css" rel="stylesheet" />
+	<link href="now-ui-kit.css" rel="stylesheet" />
 </head>
 <body>
   <h2>Currency Converter</h2>
-  <p>
-    <input id="xfrom"/>
-    <select id="from"></select>
-    <select id="to"></select>
-    <button type="button" onclick="Convert()">convert</button>
-    <span id="xto"></span>
-  </p>
+  <div>
+    <input class="form-control" id="xfrom"/>
+    <select class="dropdown" id="from"></select>
+    <select class="dropdown" id="to"></select>
+    <button type="button" class="btn btn-default" onclick="Convert()">convert</button>
+    <span class="dropdown" id="xto"></span>
+  </div>
   
 
 <script src="idb.js"></script>
