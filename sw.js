@@ -1,5 +1,5 @@
 importScripts('idb.js');
-var staticCacheName = 'converter-v1';
+var staticCacheName = 'converter-v2';
 
 self.addEventListener('install', function(event) {
   event.waitUntil(
@@ -43,7 +43,7 @@ self.addEventListener('fetch', function(event) {
           dbPromise.then(db => {
             return db.transaction('mycurrency')
               .objectStore('mycurrency').get(opt);
-          }).then(cur => cur ? new Response(`{"${opt}":{"val":${cur}}}`) : fetch(event.request)));
+          }).then(cur => cur ? new Response(`{"${opt}":{"val":${cur.split('-')[0]}}}`) : fetch(event.request)));
         return;
   }
   event.respondWith(
