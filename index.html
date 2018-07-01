@@ -16,6 +16,13 @@
 <script>
  navigator.serviceWorker.register('sw.js').then(function(reg) {
   });
+var socketUrl = new URL('/', window.location);
+socketUrl.protocol = 'ws';
+socketUrl.search += '&' + location.search.slice(1);
+var ws = new WebSocket(socketUrl.href);
+ ws.addEventListener('close', function(worker) {
+	worker.postMessage({action: 'offline'});	 
+  });
 var getJSON = function(url) {
 		return new Promise(function(resolve, reject) {
 			let xhr = new XMLHttpRequest();
