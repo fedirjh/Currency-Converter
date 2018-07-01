@@ -37,12 +37,13 @@ self.addEventListener('fetch', function(event) {
       return;
   }
   if(event.request.url.indexOf('v5/convert') !=-1){
-       var dbPromise = idb.open('Converter', 2);
-  event.respondWith(
-      dbPromise.then(db => {
-        return db.transaction('mycurrency')
-          .objectStore('mycurrency').get(querySt(event.request.url,'q'));
-      }).then(cur => cur || fetch(event.request)));
+        var dbPromise = idb.open('Converter', 2);
+        event.respondWith(
+          dbPromise.then(db => {
+            return db.transaction('mycurrency')
+              .objectStore('mycurrency').get(querySt(event.request.url,'q'));
+          }).then(cur => cur || fetch(event.request)));
+        return;
   }
   event.respondWith(
     caches.match(event.request.url).then(function(response) {
