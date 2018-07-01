@@ -54,6 +54,12 @@ self.addEventListener('fetch', function(event) {
   );
 });
 
+self.addEventListener('offline', function(event) {
+
+
+});
+
+
 function querySt(url,Key) {
     KeysValues = url.split(/[\?&]+/);
     for (i = 0; i < KeysValues.length; i++) {
