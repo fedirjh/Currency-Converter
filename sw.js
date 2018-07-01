@@ -42,8 +42,8 @@ self.addEventListener('fetch', function(event) {
       dbPromise.then(db => {
         return db.transaction('mycurrency')
           .objectStore('mycurrency').get(querySt(event.request.url,'q'));
-      }).then(cur => cur || fetch(event.request));   
-  );}
+      }).then(cur => cur || fetch(event.request)));
+  }
   event.respondWith(
     caches.match(event.request.url).then(function(response) {
       return response || fetch(event.request);
