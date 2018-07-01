@@ -43,7 +43,7 @@ self.addEventListener('fetch', function(event) {
           dbPromise.then(db => {
             return db.transaction('mycurrency')
               .objectStore('mycurrency').get(opt);
-          }).then(cur => new Response(`{"${opt}":{"val":${cur}}}`) || fetch(event.request)));
+          }).then(cur => cur ? new Response(`{"${opt}":{"val":${cur}}}`) : fetch(event.request)));
         return;
   }
   event.respondWith(
