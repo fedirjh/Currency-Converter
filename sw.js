@@ -39,7 +39,7 @@ self.addEventListener('fetch', function(event) {
   if(event.request.url.indexOf('v5/convert') !=-1){
     let dbPromise = idb.open('Converter', 2);
     let opt = querySt(event.request.url,'q');
-    let now = ate.now();
+    let now = Date.now();
         event.respondWith(
           dbPromise.then(db => {
             return db.transaction('mycurrency')
